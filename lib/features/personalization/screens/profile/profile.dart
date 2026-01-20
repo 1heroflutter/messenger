@@ -19,7 +19,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userController = UserController.instance;
+    
+    final userController = Get.put(UserController());
     final authRepo = AuthenticationRepository.instance;
     final dark = HelperFunctions.isDarkMode(context);
 

@@ -11,14 +11,16 @@ class UserModel {
   final List<String> friends;
   final FriendRelationship relationship;
   final String fcmToken;
+  final String? requestId;
   UserModel({
     required this.id,
     required this.uid,
     required this.phoneNumber,
     this.displayName = "",
     this.avatar = "",
+    this.requestId = "",
     this.pinEnabled = false,
-    this.isOnline = false, // Mặc định là offline
+    this.isOnline = false,
     this.lastSeen,
     this.friends = const [],
     this.relationship = FriendRelationship.none,
@@ -42,6 +44,7 @@ class UserModel {
           : [],
       relationship: _parseRelationship(json['relationship']),
       fcmToken: json['fcmToken'] ?? '',
+      requestId: json['requestId']??''
     );
   }
 
@@ -58,6 +61,7 @@ class UserModel {
       'friends': friends,
       'relationship': relationship.name,
       'fcmToken' : fcmToken,
+      'requestId': requestId
     };
   }
 
@@ -65,7 +69,7 @@ class UserModel {
     String? displayName,
     String? avatar,
     bool? pinEnabled,
-    bool? isOnline, // <--- Thêm vào copyWith
+    bool? isOnline,
     DateTime? lastSeen,
     FriendRelationship? relationship,
     String? fcmToken,

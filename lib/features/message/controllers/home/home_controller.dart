@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -6,12 +7,15 @@ import '../../../../data/repositories/chat/conversation_repository.dart';
 import '../../../../data/repositories/friend/friend_repository.dart';
 import '../../../personalization/models/user_model.dart';
 import '../../models/conversation_model.dart';
+
 class HomeController extends GetxController {
   static HomeController get instance => Get.find();
 
   // 1. Repositories
   final friendRepository = Get.put(FriendRepository());
-  final conversationRepository = Get.put(ConversationRepository()); // Thêm cái này
+  final scrollController = ScrollController();
+  final conversationRepository = Get.put(ConversationRepository());
+  RxBool showScrollToTopBtn = false.obs;
 
   // 2. State Data
   RxList<UserModel> friends = <UserModel>[].obs;
@@ -22,22 +26,47 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchAllData();
 
-    // TODO: Lắng nghe Socket để cập nhật lại list chat khi có tin nhắn mới
-    // socket.on('new_message', (_) => fetchConversations());
+    scrollController.addListener(() {
+      if (scrollController.hasClients) {
+        double offset = scrollController.offset;
+        if (offset > 400 && !showScrollToTopBtn.value) {
+          showScrollToTopBtn.value = true;
+        } else if (offset <= 400 && showScrollToTopBtn.value) {
+          showScrollToTopBtn.value = false;
+        }
+      }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchAllData();
+    });
   }
 
-  // Gọi cả 2 API cùng lúc
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
+  void scrollToTop() {
+    scrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
+
+  Future<void> refreshData() async {
+    fetchAllData();
+  }
+
   Future<void> fetchAllData() async {
     isLoading.value = true;
-
-    await Future.wait([
-      fetchFriends(),
-      fetchConversations(),
-    ]);
-
-    isLoading.value = false;
+    try {
+      await Future.wait([fetchFriends(), fetchConversations()]);
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchFriends() async {

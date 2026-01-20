@@ -27,11 +27,15 @@ class FriendRequestController extends GetxController {
   }
 
   // Chấp nhận
-  Future<void> acceptRequest(String userId) async {
-    final success = await friendRepository.acceptFriendRequest(userId);
+  Future<void> handleAccept(UserModel user) async {
+    if (user.requestId == null) return;
+    // 1. Gọi API accept
+    final success = await friendRepository.acceptFriendRequest(user.requestId!);
+
     if (success) {
-      pendingRequests.removeWhere((u) => u.id == userId);
-      Get.snackbar("Thành công", "Đã trở thành bạn bè");
+      // 2. Xóa khỏi danh sách UI ngay lập tức
+      pendingRequests.removeWhere((item) => item.requestId == user.requestId);
+      Get.snackbar("Thành công", "Đã trở thành bạn bè với ${user.displayName}");
     }
   }
 

@@ -20,9 +20,10 @@ class UserInformationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(UserInformationController(user: user));
+    final dark = HelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1F222A),
+      backgroundColor: dark ? const Color(0xFF1F222A) : AppColors.white,
       appBar: BasicAppbar(
         title: "",
         suffer: [
@@ -54,7 +55,7 @@ class UserInformationScreen extends StatelessWidget {
               user.displayName,
               style: Theme.of(
                 context,
-              ).textTheme.headlineMedium?.copyWith(color: Colors.white),
+              ).textTheme.headlineMedium?.copyWith(color: dark?Colors.white:Colors.black),
             ),
             const SizedBox(height: AppSizes.xs),
 

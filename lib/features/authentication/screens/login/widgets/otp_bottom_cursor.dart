@@ -106,7 +106,7 @@ class OtpBottomCursor extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton(
               onPressed: ontap,
-              child: const Text(AppTexts.signIn)),
+              child: const Text("Next")),
     ),]
     ,
     )

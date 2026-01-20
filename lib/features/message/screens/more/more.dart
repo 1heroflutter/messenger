@@ -4,6 +4,7 @@ import 'package:messenger/features/message/screens/friend_request/friend_request
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
+import '../../controllers/friend/friend_request_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../user_information/widgets/info_tile.dart';
 
@@ -12,6 +13,8 @@ class MoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final requestController = Get.put(FriendRequestController());
+
     final dark = HelperFunctions.isDarkMode(context);
 
     return Scaffold(
@@ -47,10 +50,27 @@ class MoreScreen extends StatelessWidget {
             ),
 
             // Nhóm Xã hội & Bảo mật
-            InfoTile(
-              icon: Icons.person_add_outlined,
-              title: "Invite Friends",
-              onTap: () => Get.to(const FriendRequestScreen()),
+            Obx(
+              () =>  InfoTile(
+                icon: Icons.person_add_outlined,
+                title: "Invite Friends",
+                trailing: requestController.pendingRequests.isNotEmpty
+                    ? Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                        child: Text(
+                          requestController.pendingRequests.length.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : null,
+                onTap: () => Get.to(const FriendRequestScreen()),
+              ),
             ),
             InfoTile(
               icon: Icons.groups_outlined,

@@ -16,6 +16,8 @@ class BasicAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = HelperFunctions.isDarkMode(context);
+    final textColor =  dark?Colors.white:Colors.black;
     final bgColor = backgroundColor ??
         (HelperFunctions.isDarkMode(context)
             ? AppColors.black
@@ -29,7 +31,7 @@ class BasicAppbar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             Get.back();
           },
-          icon: Icon(Icons.arrow_back, color: AppColors.white,),
+          icon: Icon(Icons.arrow_back, color: textColor,),
         ),
         centerTitle: true,
         title: Text(title, style: Theme.of(context).textTheme.headlineMedium),

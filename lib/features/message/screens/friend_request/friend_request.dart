@@ -74,7 +74,6 @@ class FriendRequestScreen extends StatelessWidget {
     );
   }
 
-  /// --- Từng mục lời mời (theo UI trong ảnh) ---
   Widget _buildRequestItem(UserModel user, FriendRequestController controller) {
     return SizedBox(
       height: 100,
@@ -99,7 +98,7 @@ class FriendRequestScreen extends StatelessWidget {
                   style: Theme.of(Get.context!).textTheme.labelLarge
                 ),
                 Text(
-                  "1 mutual friend",
+                  user.displayName,
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
                 // Placeholder
@@ -110,7 +109,7 @@ class FriendRequestScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => controller.acceptRequest(user.id),
+                          onPressed: () => controller.handleAccept(user),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor,
                             padding: EdgeInsets.zero,

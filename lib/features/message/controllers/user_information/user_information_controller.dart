@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../data/repositories/user_information/user_information_repository.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../personalization/models/user_model.dart';
+import '../chat/chat_controller.dart';
 // Import UserModel và Repository
 
 class UserInformationController extends GetxController {
@@ -152,8 +153,10 @@ class UserInformationController extends GetxController {
     final success = await repo.updateThemeColor(conversationId!, colorString);
 
     if (!success) {
-      themeColor.value = oldColor;
-      Get.snackbar("Error", "Failed to update theme color");
+      if (Get.isRegistered<ChatController>(tag: user.id)) {
+        final chatController = Get.find<ChatController>(tag: user.id);
+        chatController.themeColor.value = color;
+      }
     }
   }
 
@@ -176,6 +179,10 @@ class UserInformationController extends GetxController {
 
       if (newUrl != null) {
         backgroundImage.value = newUrl;
+        if (Get.isRegistered<ChatController>(tag: user.id)) {
+          final chatController = Get.find<ChatController>(tag: user.id);
+          chatController.backgroundImage.value = newUrl;
+        }
         Get.snackbar("Success", "Background updated");
       } else {
         Get.snackbar("Error", "Failed to upload background");

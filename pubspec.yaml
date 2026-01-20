@@ -50,6 +50,7 @@ flutter:
     - assets/logos/
     - assets/animation/empty/
     - assets/animation/loading/
+    - .env
   fonts:
     - family: Poppins
       fonts:

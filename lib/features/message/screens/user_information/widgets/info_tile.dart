@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../utils/helpers/helper_functions.dart';
+
 class InfoTile extends StatelessWidget {
   const InfoTile({
     super.key,
@@ -20,12 +22,14 @@ class InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = HelperFunctions.isDarkMode(context);
+    final textColor =  dark?Colors.white:Colors.black;
     return ListTile(
       onTap: onTap,
-      leading: Icon(icon, color: titleColor ?? Colors.white70, size: 22),
+      leading: Icon(icon, color: titleColor ?? textColor, size: 22),
       title: Text(
         title,
-        style: TextStyle(color: titleColor ?? Colors.white, fontSize: 14),
+        style: TextStyle(color: titleColor ??textColor, fontSize: 14),
       ),
       trailing: trailing ?? (onTap != null ? const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey) : null),
     );
